@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Pull code from SCM (this assumes the GitHub webhook triggers this)
-                git branch: 'main', url: 'https://github.com/yourusername/your-repo.git'
+                git branch: 'main', url: 'https://github.com/mohitjangra1910/react-calculator.git'
             }
         }
 
