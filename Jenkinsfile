@@ -43,7 +43,7 @@ pipeline {
                 // Install Vercel CLI without sudo (ensure Jenkins user has appropriate permissions)
                 sh '''
                     sudo npm install -g vercel
-                    vercel --token $VERCEL_TOKEN --prod --confirm
+                    vercel --token $VERCEL_TOKEN --prod --yes --name "my-react-calculator"
                 '''
                 
                 // Pause and wait for user input to continue the pipeline
