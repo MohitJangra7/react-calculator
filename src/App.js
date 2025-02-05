@@ -11,6 +11,13 @@ export const ACTIONS = {
   EVALUATE: "evaluate",
 }
 
+const initialState = {
+  currentOperand: null,
+  previousOperand: null,
+  operation: null,
+  overwrite: false,
+}
+
 function reducer(state, { type, payload }) {
   switch (type) {
     case ACTIONS.ADD_DIGIT:
@@ -60,7 +67,7 @@ function reducer(state, { type, payload }) {
         currentOperand: null,
       }
     case ACTIONS.CLEAR:
-      return {}
+      return initialState
     case ACTIONS.DELETE_DIGIT:
       if (state.overwrite) {
         return {
@@ -94,6 +101,8 @@ function reducer(state, { type, payload }) {
         operation: null,
         currentOperand: evaluate(state),
       }
+    default:
+      return state // Default case to handle unexpected actions
   }
 }
 
@@ -112,9 +121,11 @@ function evaluate({ currentOperand, previousOperand, operation }) {
     case "*":
       computation = prev * current
       break
-    case "÷":
+    case "/":
       computation = prev / current
       break
+    default:
+      return "" // Just in case
   }
 
   return computation.toString()
@@ -123,6 +134,7 @@ function evaluate({ currentOperand, previousOperand, operation }) {
 const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
   maximumFractionDigits: 0,
 })
+
 function formatOperand(operand) {
   if (operand == null) return
   const [integer, decimal] = operand.split(".")
@@ -133,7 +145,7 @@ function formatOperand(operand) {
 function App() {
   const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
     reducer,
-    {}
+    initialState
   )
 
   return (
@@ -153,7 +165,7 @@ function App() {
       <button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>
         DEL
       </button>
-      <OperationButton operation="÷" dispatch={dispatch} />
+      <OperationButton operation="/" dispatch={dispatch} />
       <DigitButton digit="1" dispatch={dispatch} />
       <DigitButton digit="2" dispatch={dispatch} />
       <DigitButton digit="3" dispatch={dispatch} />
