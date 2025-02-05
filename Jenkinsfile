@@ -5,7 +5,7 @@ pipeline {
         NODE_ENV = 'production'
         // Set your Vercel token as an environment variable
         // You can store the token securely in Jenkins' credentials store
-        VERCEL_TOKEN = credentials('fEgCy7inyK5LY6KdJAcmUVLm') // Replace with your Jenkins credentials ID
+        VERCEL_TOKEN = credentials('9cd937ab-bd53-45df-aad2-7fde96e83cf1') // Replace with your Jenkins credentials ID
     }
 
     stages {
