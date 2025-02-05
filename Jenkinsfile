@@ -3,6 +3,9 @@ pipeline {
 
     environment {
         NODE_ENV = 'production'
+        // Set your Vercel token as an environment variable
+        // You can store the token securely in Jenkins' credentials store
+        VERCEL_TOKEN = credentials('9cd937ab-bd53-45df-aad2-7fde96e83cf1') // Replace with your Jenkins credentials ID
     }
 
     stages {
@@ -14,12 +17,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    npm install
-                    npm install webpack@latest webpack-cli@latest
-                    npm install react-scripts@latest
-                    npx browserslist@latest --update-db
-                '''
+                sh 'npm install'
             }
         }
 
@@ -31,22 +29,24 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'npm test -- --watchAll=false || true'
+                sh 'npm test -- --watchAll=false'
             }
         }
 
         stage('Deploy') {
             steps {
+                // Deploy to Vercel using the Vercel CLI
                 sh '''
-                    npm install serve
-                    nohup npx serve -s build -l 5000 &
+                    npm install -g vercel
+                    vercel --token $VERCEL_TOKEN --prod --confirm
                 '''
-                input message: 'Deployment is complete. Do you want to finish the pipeline?', ok: 'Yes, Finish Pipeline', parameters: [
+                
+                // Pause the pipeline and wait for user input to proceed
+                input message: 'Deployment to Vercel is complete. Do you want to finish the pipeline?', ok: 'Yes, Finish Pipeline', parameters: [
                     choice(name: 'Action', choices: ['Finish', 'Abort'], description: 'Choose whether to finish or abort the pipeline')
                 ]
             }
         }
-
     }
 
     post {
