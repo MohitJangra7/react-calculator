@@ -38,9 +38,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    sudo npm install -g serve
-                    nohup serve -s build -l 5000 &
+                    npm install serve
+                    nohup npx serve -s build -l 5000 &
                 '''
+                input message: 'Deployment is complete. Do you want to finish the pipeline?', ok: 'Yes, Finish Pipeline', parameters: [
+                    choice(name: 'Action', choices: ['Finish', 'Abort'], description: 'Choose whether to finish or abort the pipeline')
+                ]
             }
         }
 
