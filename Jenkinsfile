@@ -14,7 +14,12 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                    npm install
+                    npm install webpack@latest webpack-cli@latest
+                    npm install react-scripts@latest
+                    npx browserslist@latest --update-db
+                '''
             }
         }
 
