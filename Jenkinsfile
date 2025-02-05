@@ -33,11 +33,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    npm install -g serve
+                    sudo npm install -g serve
                     nohup serve -s build -l 5000 &
                 '''
             }
         }
+
     }
 
     post {
